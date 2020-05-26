@@ -15,7 +15,7 @@ exports.up = function (knex) {
 
     .createTable("users", tbl => {
       tbl.increments('id').primary()
-      tbl.string('guid', 64).notNullable().unique() // a uuid just in case
+      tbl.string('uuid', 64).notNullable().unique() // a uuid just in case
 
       tbl.string("username", 255).notNullable().unique().index();
       tbl.string("password", 255).notNullable();
