@@ -9,15 +9,17 @@ https://spotify-api-prod.herokuapp.com/
 
 To create a new account:
 
-POST /auth/register
+### POST /auth/register
+```
 required form fields are:
 {
   "username": "someone",
   "password": "secret",
   "email": "someone@somewhere.net"
 }
-
-API returns:
+```
+#### API returns:
+```
 {
   "message": "Success",
   "data": {
@@ -27,15 +29,17 @@ API returns:
   }
   "token": (string)
 }
-
+```
 To login with an existing account:
 
-POST /auth/login
+### POST /auth/login
+```
 required form fields are:
 {
   "username": "someone",
   "password": "secret"
 }
+```
+#### API returns:
 
-API returns:
-same as /register endpoint
+same as /register endpoint above
