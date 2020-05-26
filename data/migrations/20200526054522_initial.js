@@ -14,14 +14,14 @@ exports.up = function (knex) {
     }) // centrally managed table
 
     .createTable("users", tbl => {
-      tbl.increments('id').primary()
+      tbl.increments('id')
       tbl.string('uuid', 64).notNullable().unique() // a uuid just in case
 
       tbl.string("username", 255).notNullable().unique().index();
       tbl.string("password", 255).notNullable();
       tbl.string("email", 255).notNullable().unique().index();
 
-      tbl.string("role_id")
+      tbl.integer("role_id")
         .references("roles.id")
         .onDelete("RESTRICT")
         .onUpdate("CASCADE");
