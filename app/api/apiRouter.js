@@ -10,7 +10,8 @@ router.get('/', (req, res) => {
 
 // sub-routes
 const usersRouter = require('./users/usersRouter')
-router.use('/users', usersRouter);
+const songsRouter = require('./songs/songsRouter')
 
-const productsRouter = require('./products/productsRouter')
-router.use('/products', productsRouter);
+
+router.use('/users', usersRouter);
+router.use('/songs', songsRouter);
