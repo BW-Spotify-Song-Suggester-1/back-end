@@ -15,9 +15,10 @@ const { errorHandler } = require('../middleware/messages')
 
 const app = express()
 app.use(helmet())
-app.use(logger)
 app.use(cors())
 app.use(express.json())
+if (require("../vars").APP_ENV === "development")
+  app.use(logger)
 
 // additional route handling
 app.use('/api', apiRouter)
