@@ -14,7 +14,7 @@ const vars = {
   PRODUCTION_CONN_STR: process.env.PRODUCTION_CONN_STR || process.env.DATABASE_URL,
   DB_ENV: process.env.DB_ENV || 'development',
 
-  BCRYPT_ROUNDS: process.env.BCRYPT_ROUNDS || 2,
+  BCRYPT_ROUNDS: process.env.BCRYPT_ROUNDS || 4,
 
   JWT_SECRET: process.env.JWT_SECRET,
 
