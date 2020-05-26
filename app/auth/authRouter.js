@@ -18,7 +18,7 @@ router.post("/register", (req, res, next) => {
       const token = createToken(result)
       res.set('authorization', token)
 
-      res.status(200).json({message: "Success", token: token})
+      res.status(200).json({message: "Success", data: result, token: token})
     })
     .catch(err => {
       next({...messages.dbCreateError, extra: err})
@@ -39,7 +39,7 @@ router.post("/login", (req, res, next) => {
         const token = createToken(result)
         res.set("authorization", token)
 
-        res.status(200).json({message: "Logged in successfully!", token: token})
+        res.status(200).json({message: "Logged in successfully!", data: result, token: token})
       } else {
         next(messages.invalidCredentials)
       }

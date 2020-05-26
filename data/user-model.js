@@ -12,16 +12,12 @@ module.exports = {
 const log = console.log
 
 async function insert (data) {
-  log("before-insert", data)
   try {
-    data.guid = uuidv4()
-  
+    data.uuid = uuidv4()
     data.password = makeHash(data.password)
-
-    const result = await db('users').insert(data, 'id').debug()
+    const result = await db('users').insert(data, 'id')
 
     if (result) {
-      log("after-insert", data)
       return getById(result[0])
     }
     else {
@@ -57,6 +53,19 @@ function getByUsername(username) {
       // password: 'password'
     })
     .where("username", username)
+    .select()
+    .first()
+}
+
+function getByEmail(email) {
+  return db("users")
+    .columns({
+      id:       "id",
+      username: "username",
+      email: "email"
+      // password: 'password'
+    })
+    .where("email", email)
     .select()
     .first()
 }
