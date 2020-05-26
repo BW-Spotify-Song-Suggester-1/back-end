@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = require('../vars')
 const messages = require('./messages').messageDictionary
 
-module.export = authenticate
+module.exports = authorize
 
-function authenticate(req, res, next) {
+function authorize(req, res, next) {
   const token = req.headers.authorization
 
   if (token) {

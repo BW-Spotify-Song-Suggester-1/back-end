@@ -47,6 +47,10 @@ const messageDictionary = {
     message: "You must first authenticate yourself",
     code: 401,
   },
+  invalidCredentials: {
+    message: "Your username and/or password are incorrect",
+    code: 401,
+  },
   // "Not Implemented" Errors
   notImplemented: {
     message: "Not yet implemented",
@@ -60,8 +64,9 @@ function errorHandler(err, req, res, next) {
   // ensure error has values;
   const error = {error: err, method: req.method, url: req.url, params: req.params, query: req.query}
 
-  res.status(err.code || 500).json(error);
-  next();
+  const status = err.code || res.statusCode
+  res.status(status || 500).json(error);
+  // next();
 }
 
 module.exports = {
