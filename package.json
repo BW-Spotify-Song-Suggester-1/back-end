@@ -1,0 +1,43 @@
+{
+  "name": "node-api-boilerplate",
+  "version": "1.0.0",
+  "description": "1. structure\r  2. dependencies\r  3. boilerplate code",
+  "main": "index.js",
+  "module": "main.js",
+  "scripts": {
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "test": "cross-env DB_ENV=development jest --watch --runInBand"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antonyk/node-api-boilerplate.git"
+  },
+  "keywords": [],
+  "author": "Anthony K",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/antonyk/node-api-boilerplate/issues"
+  },
+  "homepage": "https://github.com/antonyk/node-api-boilerplate#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-session-knex": "^1.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "helmet": "^3.22.0",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.21.1",
+    "pg": "^8.2.0",
+    "sqlite3": "^4.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3",
+    "jest": "^26.0.1",
+    "supertest": "^4.0.2",
+    "cross-env": "^7.0.2"
+  }
+}
