@@ -46,8 +46,9 @@ router.post("/login", (req, res, next) => {
     users.login(user.username, user.password).then(result => {
       if (result) {
         const payload = {sub: result.id, username: result.username}
+        if (result.spotify_token) payload["spotify"] = result.spotify_token
         const token = createToken(payload)
-        res.set("authorization", token)
+        // res.set("authorization", token)
 
         res.status(200).json({message: "Logged in successfully!", data: result, token: token})
       } else {
