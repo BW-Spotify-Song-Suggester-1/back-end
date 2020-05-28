@@ -3,6 +3,7 @@ const url = require('url')
 const request = require('request') // "Request" library
 const querystring = require('querystring')
 
+const users = require('../users/users-model')
 const generateRandomString = require('../../utils/randomString')
 const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = require("../../vars")
 
