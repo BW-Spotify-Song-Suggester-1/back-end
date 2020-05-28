@@ -8,10 +8,10 @@ const helmet = require('helmet')
 const cors = require('cors');
 
 const { HTTP_PORT, HTTPS_PORT } = require('../vars');
-const apiRouter = require('./api/apiRouter')
-const authRouter = require('./auth/authRouter')
+const apiRouter = require('./api-router')
+const authRouter = require('./auth/auth-router')
 const logger = require('../middleware/logger')
-const { errorHandler } = require('../middleware/messages')
+const { errorHandler } = require('../middleware/errors')
 
 const app = express()
 app.use(helmet())

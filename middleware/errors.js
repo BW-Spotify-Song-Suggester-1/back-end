@@ -62,7 +62,19 @@ function errorHandler(err, req, res, next) {
   // do some loging: error + request
 
   // ensure error has values;
-  const error = {error: err, method: req.method, url: req.url, params: req.params, query: req.query}
+  const error = {
+    error: {
+      ...err,
+      system: (err.err) ? err.err.toString() : undefined,
+    },
+    request: {
+      method: (req.method.length > 0) ? req.method : undefined,
+      url: (req.url.length > 0) ? req.url : undefined,
+      query: (req.query.length > 0) ? req.query : undefined,
+      params: (req.params.length > 0) ? req.params : undefined,
+    }
+  }
+  delete error.error.err
 
   const status = err.code || res.statusCode
   res.status(status || 500).json(error);
