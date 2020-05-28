@@ -24,6 +24,7 @@ exports.up = function (knex) {
       tbl.string("username", 255).notNullable().unique().index()
       tbl.string("password", 255).notNullable()
       tbl.string("email", 255).notNullable().unique().index()
+      tbl.string("spotify_token")
 
       tbl.integer("role_id")
         .references("roles.id")

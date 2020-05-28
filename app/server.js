@@ -11,6 +11,7 @@ const cookieParser = require('cookie-parser');
 const { HTTP_PORT, HTTPS_PORT } = require('../vars');
 const apiRouter = require('./api-router')
 const authRouter = require('./auth/auth-router')
+const testRouter = require('./test-router')
 const logger = require('../middleware/logger')
 const { errorHandler } = require('../middleware/errors')
 
@@ -25,6 +26,7 @@ if (require("../vars").APP_ENV === "development")
 // additional route handling
 app.use('/api', apiRouter)
 app.use('/auth', authRouter)
+app.use('/test', testRouter)
 
 // final, catch-all middleware
 app.use(errorHandler)

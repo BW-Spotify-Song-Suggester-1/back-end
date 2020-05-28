@@ -52,6 +52,7 @@ function getById(id) {
       id:       "id",
       username: "username",
       email: "email",
+      spotify_token: "spotify_token",
       created_at: "created_at",
       // password: "password"
     })
@@ -117,6 +118,7 @@ async function update(id, data) {
   if (changes.password) {
     changes.password = makeHash(changes.password)
   }
+  console.log("user-update: ", changes)
 
   const result = await db("users")
     .update(changes)

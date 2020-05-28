@@ -3,11 +3,10 @@ const url = require('url')
 const request = require('request') // "Request" library
 const querystring = require('querystring')
 
-const users = require('../users/users-model')
-const errors = require('../../middleware/errors').messageDictionary
-const { createToken } = require("../../utils/jwt")
-const generateRandomString = require('../../utils/randomString')
-const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = require("../../vars")
+const users = require('./users/users-model')
+const generateRandomString = require('../utils/randomString')
+const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = require("../vars")
+const errors = require('../middleware/errors').messageDictionary
 
 module.exports = router
 
@@ -29,7 +28,7 @@ router.get('/login', function(req, res) {
       client_id: SPOTIFY_CLIENT_ID,
       scope: scope,
       redirect_uri: redirect_uri,
-      state: state
+      state: state,
     }))
 })
 
@@ -40,6 +39,7 @@ router.get('/callback', function(req, res) {
 
   var code = req.query.code || null
   var state = req.query.state || null
+  var uid = "e7296b6d-a813-40f1-83fe-681de65eb0fd"
   var storedState = req.cookies ? req.cookies[stateKey] : null
 
   if (state === null || state !== storedState) {
@@ -70,10 +70,8 @@ router.get('/callback', function(req, res) {
         const refresh_token = body.refresh_token
 
         // persist refresh_token to user's account
-        const user = await users.update(req.jwt.sub, { spotify_token: refresh_token })
-
-        const payload = { sub: req.jwt.sub, username: result.username, spotify: access_token }
-        const token = createToken(payload)
+        const user = await users.update(uid, { spotify_token: refresh_token })
+        console.log(user)
 
         var options = {
           url: 'https://api.spotify.com/v1/me',
@@ -83,8 +81,8 @@ router.get('/callback', function(req, res) {
 
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
-          res.status(200).json({profile: body, token: token})
-          console.log(body);
+          res.status(200).json({appuser: user, spotify: body, acctoken: access_token, reftoken: refresh_token})
+          // console.log(body);
         })
 
         // we can also pass the token to the browser to make requests from there
