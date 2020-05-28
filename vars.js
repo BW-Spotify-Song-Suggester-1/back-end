@@ -16,7 +16,11 @@ const vars = {
 
   BCRYPT_ROUNDS: process.env.BCRYPT_ROUNDS || 4,
 
+  // SECRETS
   JWT_SECRET: process.env.JWT_SECRET,
+  
+  SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
+  SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
 
   // 2. CONSTANTS
 

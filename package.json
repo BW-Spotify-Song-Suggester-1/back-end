@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/antonyk/node-api-boilerplate#readme",
   "dependencies": {
+    "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
@@ -30,6 +32,8 @@
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.1",
     "pg": "^8.2.0",
+    "querystring": "^0.2.0",
+    "request": "^2.88.2",
     "sqlite3": "^4.2.0",
     "uuid": "^8.1.0"
   },

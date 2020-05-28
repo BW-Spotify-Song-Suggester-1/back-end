@@ -4,6 +4,7 @@
 
 https://spotify-api-prod.herokuapp.com/
 
+
 ## API Documentation
 
 ### General principles
@@ -11,14 +12,14 @@ https://spotify-api-prod.herokuapp.com/
 #### Requests
 This Web API follows the REST principles:
 - resources are accessed using standard HTTPS requests
-- HTTP requests are made to distinct API endpoint.
-- use HTTP verbs (GET, POST, PUT, PATCH, DELETE, etc) based on the action taken
+- HTTP requests are made to distinct API endpoints
+- use HTTP verbs (GET, POST, PUT, DELETE, etc) based on the action taken
 
-#### HTTP Methods and their roles:
-GET     - Retrieves existing resources
-POST    - Creates a new resource
-PUT     - Updates an existing resource
-DELETE  - Deletes resources
+#### HTTP Methods and their roles
+- GET - Retrieves existing resources
+- POST - Creates a new resource
+- PUT - Updates an existing resource
+- DELETE - Deletes resources
 
 ## API Endpoints
 - All Data is returned in JSON format
@@ -28,12 +29,8 @@ DELETE  - Deletes resources
 - Errors return an "error" object
 - Auth requests return a "token" object
 
-### Registration and Authentication
-
-#### POST /auth/register
-Use this endpoint to create a NEW user account
-
-Required body fields are:
+### POST /auth/register
+Required fields:
 ```
 {
   "username": "someone",
@@ -53,11 +50,8 @@ Returned JSON:
   "token": (string)
 }
 ```
-
 ### POST /auth/login
-Use this endpoint to log in with an existing user account
-
-Required body fields are:
+Required fields:
 ```
 {
   "username": "someone",
@@ -66,3 +60,30 @@ Required body fields are:
 ```
 Returned JSON:
 sames as /register endpoint above
+
+**ALL of the following non-auth requests require an authorization token in the header**
+### PATH /api/user
+GET /api/user
+- get all of the currently logged-in user's profile information
+
+PUT /api/user
+- update currently logged-in user's profile settings
+
+DELETE /api/user
+- delete this user's account
+
+### PATH /favorite
+GET /api/favorite
+- gets the full list of the user's favorite songs
+
+POST /api/favorite
+- add a song to your favorites
+
+DELETE /api/favorite/:id
+- delete user's favorite song with {id}
+
+
+
+
+
+
