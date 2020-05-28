@@ -6,21 +6,21 @@ module.exports = {
   checkHash
 }
 
-function makeHash(data) {
+async function makeHash(data) {
   try {
-    return bcryptjs.hashSync(data, 4)
+    const salt = await bcryptjs.genSalt(Number(BCRYPT_ROUNDS))
+    return bcryptjs.hash(data, salt)
   }
   catch(error) {
     console.log(error)
   }
 }
 
-function checkHash(string, hash) {
+function checkHash(str, hash) {
   try {
-    return bcryptjs.compareSync(string, hash)
+    return bcryptjs.compare(str, hash)
   }
   catch(error) {
     console.log(error)
   }
 }
-
