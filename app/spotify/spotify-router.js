@@ -15,7 +15,7 @@ module.exports = router
 const redirect_endpoint_path = "/callback"
 const stateKey = 'spotify_auth_state'
 
-router.get('/login', function(req, res) {
+router.get('/connect', function(req, res) {
   const redirect_uri = urlBuilder(req, redirect_endpoint_path)
 
   var state = generateRandomString(16)
