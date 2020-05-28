@@ -62,28 +62,31 @@ Returned JSON:
 sames as /register endpoint above
 
 **ALL of the following non-auth requests require an authorization token in the header**
-### PATH /api/user
-GET /api/user
+### User Management
+#### GET /api/user
 - get all of the currently logged-in user's profile information
 
-PUT /api/user
+#### PUT /api/user
 - update currently logged-in user's profile settings
 
-DELETE /api/user
+#### DELETE /api/user
 - delete this user's account
 
-### PATH /favorite
-GET /api/favorite
+### Favorites (Tracks)
+#### GET /api/favorite
 - gets the full list of the user's favorite songs
 
-POST /api/favorite
+#### POST /api/favorite
 - add a song to your favorites
 
-DELETE /api/favorite/:id
+#### DELETE /api/favorite/:id
 - delete user's favorite song with {id}
 
-
-
-
-
+### Spotify Connect
+1. Connect current user to a Spotify account
+  - call GET /api/spotify/connect
+  - gets a perma access token (refresh_token) from Spotify
+  - returns jwt with embedded spotify access_token
+2. Update client's Authorization token with the newly sent one
+3. Now all calls to the API will include the spotify access token
 
