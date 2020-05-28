@@ -2,14 +2,14 @@ const router = require('express').Router();
 
 const authorize = require("../middleware/authorize")
 const usersRouter = require('./users/users-router')
-const songsRouter = require('./songs/songs-router')
+const tracksRouter = require('./tracks/tracks-router')
 
 module.exports = router;
 
 router.use(authorize)
 
 router.use('/users', usersRouter);
-router.use('/songs', songsRouter);
+router.use('/tracks', tracksRouter);
 
 // ROUTER METHODS
 
