@@ -20,20 +20,76 @@ const stateKey = 'spotify_auth_state'
 router.get('/connect', function(req, res) {
   const redirect_uri = urlBuilder(req, redirect_endpoint_path)
 
-  var state = generateRandomString(16)
+  const state = generateRandomString(16)
   res.cookie(stateKey, state)
 
   // your application requests authorization
-  var scope = 'user-read-private user-read-email'
-  res.redirect('https://accounts.spotify.com/authorize?' +
-    querystring.stringify({
-      response_type: 'code',
-      client_id: SPOTIFY_CLIENT_ID,
-      scope: scope,
-      redirect_uri: redirect_uri,
-      state: state
-    }))
+
+  // generate URL to return to client
+  const scope = 'user-read-private user-read-email'
+  const redirUrl = 'https://accounts.spotify.com/authorize?' +
+  querystring.stringify({
+    response_type: 'code',
+    client_id: SPOTIFY_CLIENT_ID,
+    scope: scope,
+    redirect_uri: redirect_uri,
+    state: state
+  })
+
+  res.status(200).json({ data: redirUrl })
+
 })
+
+router.get('/token', async (req, res, next) => {
+
+  const access_token = body.access_token
+  const refresh_token = body.refresh_token
+
+  users.getById(rq.jwt.sub)
+    .then(result => {
+
+
+    })
+  
+  // requesting access token from refresh token
+  // var refresh_token = req.query.refresh_token
+  var authOptions = {
+    url: 'https://accounts.spotify.com/api/token',
+    headers: { 'Authorization': 'Basic ' + (Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString('base64')) },
+    form: {
+      grant_type: 'refresh_token',
+      refresh_token: refresh_token
+    },
+    json: true
+  }
+
+  request.post(authOptions, function(error, response, body) {
+    if (!error && response.statusCode === 200) {
+      var access_token = body.access_token;
+      res.send({
+        'access_token': access_token
+      })
+    }
+  })
+
+
+  // persist refresh_token to user's account
+  await users.update(req.jwt.sub, { spotify_token: refresh_token })
+
+  const payload = { 
+    sub: req.jwt.sub,
+    username: req.jwt.username,
+    spotify_refresh: refresh_token,
+  }
+  const token = createToken(payload)
+
+  const config = {
+    headers: { 'Authorization': 'Bearer ' + access_token },
+    json: true
+  }
+
+
+}) 
 
 router.get('/callback', function(req, res, next) {
   // your application requests refresh and access tokens
