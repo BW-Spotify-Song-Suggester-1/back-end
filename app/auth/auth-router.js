@@ -17,7 +17,10 @@ router.post("/register", (req, res, next) => {
       // create the jwt and return it
       // log("one", result)
       if (result) {
-        const payload = {sub: result.id, username: result.username}
+        const payload = {
+          sub: result.id, 
+          username: result.username
+        }
         // log('two', payload)
         const token = createToken(payload)
         // log('three', token)
@@ -48,7 +51,7 @@ router.post("/login", (req, res, next) => {
         const payload = {
           sub: result.id, 
           username: result.username,
-          spotify: result.spotify_token,
+          spotify_refresh: result.spotify_token,
         }
         const token = createToken(payload)
         // res.set("authorization", token)

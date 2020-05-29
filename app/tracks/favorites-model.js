@@ -2,35 +2,43 @@ const db = require("../../data/dbConfig")("knex")
 
 module.exports = {
   getByUserId,
-  addFavSong,
-  removeFavSong
+  add,
+  addMany,
+  remove,
 }
 
 function getByUserId(id) {
   db("favorites")
     .columns({
-      song_id: "song_id",
+      track_id: "track_id",
       created_at: "created_at"
     })
     .where("user_id", id)
     .select()
 }
 
-async function addFavSong(userId, songId) {
+async function add(userId, trackId) {
   await db("favorites")
     .insert({
       "user_id": userId,
-      "song_id": songId
+      "track_id": trackId
     })
 
   return db("favorites")
-    .where({"user_id": userId, "song_id": songId })
+    .where({"user_id": userId, "track_id": trackId })
     .select()
     .first()
 }
 
-function removeFavSong(userId, songId) {
+function remove(userId, trackId) {
   db("favorites")
-  .where({"user_id": userId, "song_id": songId })
+  .where({"user_id": userId, "track_id": trackId })
   .del()
 }
+
+function addMany(userId, tracks) {
+  const values = tracks.map(item => ({user_id: userId, track_id: item}))
+  return db("favorites")
+    .insert(values)
+}
+

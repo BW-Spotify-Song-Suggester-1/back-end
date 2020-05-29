@@ -36,14 +36,15 @@ exports.up = function (knex) {
 
     // FAVORITES
     .createTable("favorites", tbl => {
-      tbl.primary(["user_id", "song_id"])
+      tbl.primary(["user_id", "track_id"])
 
-      tbl.string("song_id", 64).notNullable()
+      tbl.string("track_id", 64).notNullable()
       tbl.string("user_id", 64).notNullable()
         .references("users.id")
         .onDelete("CASCADE")
         .onUpdate("CASCADE")
 
+      // tbl.integer("service_id") // reference to "service" table for all the different apps
       tbl.timestamp("created_at", {useTz: true}).defaultTo(knex.fn.now())
     })
 
@@ -51,7 +52,7 @@ exports.up = function (knex) {
     .createTable("history", tbl => {
       tbl.string("id", 64).primary()
 
-      tbl.string("song_id", 64).notNullable()
+      tbl.string("track_id", 64).notNullable()
       tbl.string("user_id", 64).notNullable()
         .references("users.id")
         .onDelete("CASCADE")
