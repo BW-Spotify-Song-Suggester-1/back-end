@@ -90,3 +90,12 @@ sames as /register endpoint above
 2. Update client's Authorization token with the newly sent one
 3. Now all calls to the API will include the spotify access token
 
+Spotify Endpoints:
+
+#### GET /api/spotify/connect
+
+#### GET /api/spotify/saved
+
+#### GET /api/spotify/profile
+
+
