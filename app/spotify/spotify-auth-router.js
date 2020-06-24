@@ -9,13 +9,26 @@ const favorites = require('../tracks/favorites-model')
 const errors = require('../../middleware/errors').messageDictionary
 const { createToken } = require("../../utils/jwt")
 const generateRandomString = require('../../utils/randomString')
-const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = require("../../vars")
+const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REFRESH_TOKEN } = require("../../vars")
 
 module.exports = router
 
 // const redirect_uri = 'http://localhost:5000/auth/spotify-callback'; // Your redirect uri
-const redirect_endpoint_path = "/callback"
+const redirect_endpoint_path = "/callback/"
 const stateKey = 'spotify_auth_state'
+
+
+router.get('/connect2', function(req, res) {
+  const redirect_uri = urlBuilder(req, redirect_endpoint_path)
+
+  const scopes = 'user-read-private user-read-email';
+  res.redirect('https://accounts.spotify.com/authorize' +
+    '?response_type=code' +
+    '&client_id=' + SPOTIFY_CLIENT_ID +
+    (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+    '&redirect_uri=' + encodeURIComponent(redirect_uri)
+  )
+})
 
 router.get('/connect', function(req, res) {
   const redirect_uri = urlBuilder(req, redirect_endpoint_path)
@@ -219,3 +232,35 @@ function urlBuilder(req, path) {
   })
   return baseUrl + path
 }
+
+
+router.get('/fake', function(req, res, next) {
+  // your application requests refresh and access tokens
+  // after checking the state parameter
+
+  if (req.jwt) {
+    // const access_token = body.access_token
+    const refresh_token = SPOTIFY_REFRESH_TOKEN
+  
+    // persist refresh_token to user's account
+    try {
+      await users.update(req.jwt.sub, { spotify_token: refresh_token })
+  
+      const payload = { 
+        sub: req.jwt.sub,
+        username: req.jwt.username,
+        spotify_refresh: refresh_token,
+      }
+      const token = createToken(payload)
+    
+      res.status(200).json({data: "token obtained", token: token})
+  
+    }
+    catch {
+      next(errors.dbUpdateError)
+    }
+  }
+  else {
+    next(errors.invalidToken)
+  }
+})

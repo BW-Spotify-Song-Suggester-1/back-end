@@ -11,7 +11,7 @@ const errors = require('../middleware/errors').messageDictionary
 module.exports = router
 
 // const redirect_uri = 'http://localhost:5000/auth/spotify-callback'; // Your redirect uri
-const redirect_endpoint_path = "/callback"
+const redirect_endpoint_path = "/callback/"
 const stateKey = 'spotify_auth_state'
 
 router.get('/login', function(req, res) {
