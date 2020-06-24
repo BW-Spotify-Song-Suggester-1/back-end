@@ -11,6 +11,7 @@ router.get("/profile", authRefresh, async (req, res, next) => {
 
   if (req.jwt.spotify_access) {
     const access_token = req.jwt.spotify_access
+    console.log(access_token)
     const config = {
       headers: { 'Authorization': 'Bearer ' + access_token },
       json: true
@@ -18,9 +19,10 @@ router.get("/profile", authRefresh, async (req, res, next) => {
 
     try {
       const result = await axios.get('https://api.spotify.com/v1/me', config)
-      res.status(200).json({data: result})
+      res.status(200).json({data: result.data})
     }
     catch(err) {
+      console.log(err)
       res.status(500).json({error: "Unable to get data from Spotify", system: err})
     }
   } else {
@@ -33,23 +35,24 @@ router.get("/saved", authRefresh, async(req, res, next) => {
 
   if (req.jwt.spotify_access) {
     const access_token = req.jwt.spotify_access
+    console.log(access_token)
     const config = {
-      headers: {
-        'Authorization': 'Bearer ' + access_token
-      },
+      headers: { 'Authorization': 'Bearer ' + access_token },
       json: true
     }
   
     // axios get
     try {
       // get tracks from spotify
-      const saved = await axios.get("https://api.spotify.com/v1/me/tracks", config)
+      const result = await axios.get("https://api.spotify.com/v1/me/tracks", config)
 
       // return tracks to user
-      res.status(200).json({data: saved})
+      res.status(200).json({data: result.data})
     }
     catch(err) {
-      next(errors.dbUpdateError, err)
+      // console.log(err)
+      res.status(500).json({error: "Error while getting or parsing spotify data", system: err})
+      // next(errors.notAcceptableValue, err)
     }
   } else {
     res.status(401).json({error: "Missing or invalid access token"})
