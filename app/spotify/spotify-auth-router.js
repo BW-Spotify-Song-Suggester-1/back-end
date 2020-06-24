@@ -241,17 +241,22 @@ router.get('/fake', function(req, res, next) {
     const refresh_token = SPOTIFY_REFRESH_TOKEN
   
     // persist refresh_token to user's account
-    await users.update(req.jwt.sub, { spotify_token: refresh_token })
+    try {
+      await users.update(req.jwt.sub, { spotify_token: refresh_token })
   
-    const payload = { 
-      sub: req.jwt.sub,
-      username: req.jwt.username,
-      spotify_refresh: refresh_token,
+      const payload = { 
+        sub: req.jwt.sub,
+        username: req.jwt.username,
+        spotify_refresh: refresh_token,
+      }
+      const token = createToken(payload)
+    
+      res.status(200).json({data: "token obtained", token: token})
+  
     }
-    const token = createToken(payload)
-  
-    res.status(200).json({data: savedTracks, token: token})
-  
+    catch {
+      next(errors.dbUpdateError)
+    }
   }
   else {
     next(errors.invalidToken)
