@@ -1,3 +1,7 @@
+# SQLite3 DB
+*.db3
+data/sqlite3.db3
+
 # Logs
 logs
 *.log
