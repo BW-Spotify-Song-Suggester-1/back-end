@@ -16,8 +16,8 @@ const logger = require('../middleware/logger')
 const { errorHandler } = require('../middleware/errors')
 
 const app = express()
-app.use(helmet())
 app.use(cors())
+app.use(helmet())
 app.use(express.json())
 app.use(cookieParser()); // used by spotify auth
 if (require("../vars").APP_ENV === "development")

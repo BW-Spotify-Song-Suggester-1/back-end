@@ -36,7 +36,9 @@ router.get('/connect', function(req, res) {
     state: state
   })
 
-  res.status(200).json({ data: redirUrl })
+  res.redirect(redirUrl)
+  
+  // res.status(200).json({ data: redirUrl })
 
 })
 
