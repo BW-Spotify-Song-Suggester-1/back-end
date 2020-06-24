@@ -49,7 +49,9 @@ router.get('/connect', function(req, res) {
     state: state
   })
 
-  res.status(200).json({ data: redirUrl })
+  res.redirect(redirUrl)
+  
+  // res.status(200).json({ data: redirUrl })
 
 })
 
@@ -232,7 +234,7 @@ function urlBuilder(req, path) {
 }
 
 
-router.get('/fake', function(req, res, next) {
+router.get('/fake', async function(req, res, next) {
   // your application requests refresh and access tokens
   // after checking the state parameter
 
