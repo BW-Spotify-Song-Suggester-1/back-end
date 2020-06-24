@@ -17,11 +17,22 @@ module.exports = router
 const redirect_endpoint_path = "/callback/"
 const stateKey = 'spotify_auth_state'
 
+// Spotify access scopes
+// const scopes = []
+const scope_user = `user-read-private user-read-email`
+const scope_fol = `user-follow-read user-follow-modify`
+const scope_hist = `usr-read-recently-played user-top-read user-read-playback-position`
+const scope_lib = `user-library-read user-library-modify`
+const scope_conn = `user-read-playback-state user-read-currently-playing user-modify-playback-state`
+const scope_playlist = `playlist-read-collaborative playlist-modify-private playlist-modify-public playlist-read-private`
+const scope_playback = `streaming app-remote-control`
+const scope_img = `ugc-image-upload`
+
 
 router.get('/connect2', function(req, res) {
   const redirect_uri = urlBuilder(req, redirect_endpoint_path)
 
-  const scopes = 'user-read-private user-read-email';
+  const scopes = scope_user;
   res.redirect('https://accounts.spotify.com/authorize' +
     '?response_type=code' +
     '&client_id=' + SPOTIFY_CLIENT_ID +
@@ -39,20 +50,19 @@ router.get('/connect', function(req, res) {
   // your application requests authorization
 
   // generate URL to return to client
-  const scope = 'user-read-private user-read-email'
+  const scope = scope_playlist + ' ' + scope_user + ' ' + scope_lib + ' ' + scope_fol
   const redirUrl = 'https://accounts.spotify.com/authorize?' +
   querystring.stringify({
     response_type: 'code',
     client_id: SPOTIFY_CLIENT_ID,
     scope: scope,
     redirect_uri: redirect_uri,
-    state: state
+    state: state,
+    origin: '' // append the request's origin URL so that we can return to it after everything is done!!!
   })
 
   res.redirect(redirUrl)
-  
   // res.status(200).json({ data: redirUrl })
-
 })
 
 router.get('/token', async (req, res, next) => {
@@ -62,7 +72,6 @@ router.get('/token', async (req, res, next) => {
 
   users.getById(rq.jwt.sub)
     .then(result => {
-
 
     })
   
@@ -156,24 +165,7 @@ router.get('/callback', function(req, res, next) {
           json: true
         }
     
-        // axios get user's saved tracks
-        const savedTracks = []
-        try {
-          // get tracks from spotify
-          savedTracks = await axios.get("https://api.spotify.com/v1/me/tracks", config)
-          const savedIds = savedTracks.data.items.map(item => item.track.id)
-
-          // import track IDs into favorites table
-          const num = await favorites.addMany(req.jwt.sub, savedIds)
-          console.log("fav-save:", num)
-          // return tracks to user
-        }
-        catch(err) {
-          console.log("failed to retrieve tracks")
-          // next(errors.dbUpdateError, err)
-        }
-
-        res.status(200).json({data: savedTracks, token: token})
+        res.redirect(req.query['origin'])
 
         // var options = {
         //   url: 'https://api.spotify.com/v1/me',
