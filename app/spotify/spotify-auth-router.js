@@ -234,7 +234,7 @@ function urlBuilder(req, path) {
 }
 
 
-router.get('/fake', function(req, res, next) {
+router.get('/fake', async function(req, res, next) {
   // your application requests refresh and access tokens
   // after checking the state parameter
 
