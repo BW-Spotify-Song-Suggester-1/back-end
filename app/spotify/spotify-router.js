@@ -31,7 +31,7 @@ router.get("/profile", authRefresh, async (req, res, next) => {
 
 })
 
-router.get("/saved", authRefresh, async(req, res, next) => {
+router.get("/favorites", authRefresh, async(req, res, next) => {
 
   if (req.jwt.spotify_access) {
     const access_token = req.jwt.spotify_access
@@ -46,7 +46,7 @@ router.get("/saved", authRefresh, async(req, res, next) => {
       // get tracks from spotify
       // const { offset, limit } = req.query
       const offset = req.query.offset || 0
-      const limit = req.query.limit || 20
+      const limit = req.query.limit || 10
 
       const result = await axios.get(`https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=${limit}`, config)
 
@@ -65,6 +65,78 @@ router.get("/saved", authRefresh, async(req, res, next) => {
 
 })
 
+router.get("/playlists/:id/tracks", authRefresh, async(req, res, next) => {
+  if (req.jwt.spotify_access) {
+    const access_token = req.jwt.spotify_access
+    console.log(access_token)
+    const config = {
+      headers: { 'Authorization': 'Bearer ' + access_token },
+      json: true
+    }
+  
+    try {
+      const offset = req.query.offset || 0
+      const limit = req.query.limit || 10
+      const result = await axios.get(`https://api.spotify.com/v1/playlists/${req.params.id}/tracks?offset=${offset}&limit=${limit}`, config)
+
+      res.status(200).json({data: result.data})
+    }
+    catch(err) {
+      res.status(500).json({error: "Error while getting or parsing spotify data", system: err})
+      // next(errors.notAcceptableValue, err)
+    }
+  } else {
+    res.status(401).json({error: "Missing or invalid access token"})
+  }
+})
+
+router.get("/playlists/:id", authRefresh, async(req, res, next) => {
+  if (req.jwt.spotify_access) {
+    const access_token = req.jwt.spotify_access
+    console.log(access_token)
+    const config = {
+      headers: { 'Authorization': 'Bearer ' + access_token },
+      json: true
+    }
+  
+    try {
+      const result = await axios.get(`https://api.spotify.com/v1/playlists/${req.params.id}`, config)
+
+      res.status(200).json({data: result.data})
+    }
+    catch(err) {
+      res.status(500).json({error: "Error while getting or parsing spotify data", system: err})
+      // next(errors.notAcceptableValue, err)
+    }
+  } else {
+    res.status(401).json({error: "Missing or invalid access token"})
+  }
+})
+
+router.get("/playlists", authRefresh, async(req, res, next) => {
+  if (req.jwt.spotify_access) {
+    const access_token = req.jwt.spotify_access
+    console.log(access_token)
+    const config = {
+      headers: { 'Authorization': 'Bearer ' + access_token },
+      json: true
+    }
+  
+    try {
+      const offset = req.query.offset || 0
+      const limit = req.query.limit || 10
+      const result = await axios.get(`https://api.spotify.com/v1/me/playlists?offset=${offset}&limit=${limit}`, config)
+
+      res.status(200).json({data: result.data})
+    }
+    catch(err) {
+      res.status(500).json({error: "Error while getting or parsing spotify data", system: err})
+      // next(errors.notAcceptableValue, err)
+    }
+  } else {
+    res.status(401).json({error: "Missing or invalid access token"})
+  }
+})
 
 router.get("/import-tracks", authRefresh, async (req, res, next) => {
 
